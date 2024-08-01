@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Comprobantes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* Elimina el scroll horizontal */
+        }
+
+        .auth-container, .main-container {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 2em;
+            margin: 1em;
+            box-sizing: border-box;
+        }
+
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 1em;
+            color: #ff3366;
+        }
+
+        .auth-container input {
+            width: calc(100% - 2em);
+            padding: 0.8em;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+
+        .auth-container button {
+            background-color: #ff3366;
+            border: none;
+            color: white;
+            padding: 0.8em;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+        }
+
+        .auth-container button:hover {
+            background-color: #cc0055;
+            transform: scale(1.03);
+        }
+
+        header {
+            background-color: #ff00d4;
+            color: white;
+            padding: 1em;
+            font-size: 2em;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .container {
+            margin: 2em auto;
+            padding: 2em;
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .container h2 {
+            font-size: 2em;
+            color: #ff3366;
+            margin-bottom: 1em;
+        }
+
+        .form-group {
+            margin-bottom: 1.5em;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8em;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background: #f9f9f9;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #ff3366;
+            border: none;
+            color: white;
+            padding: 0.8em;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 1em;
+        }
+
+        button:hover {
+            background-color: #cc0055;
+            transform: scale(1.03);
+        }
+
+        .invoice-container {
+            display: none;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 2em;
+            margin-top: 2em;
+            text-align: left;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .invoice-container .paid-indicator {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            font-size: 1.5em;
+            color: #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1em;
+                font-size: 1em;
+            }
+
+            .container h2 {
+                font-size: 1.5em;
+            }
+
+            .form-group input, .form-group textarea {
+                width: calc(100% - 2em);
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.8em;
+                font-size: 0.9em;
+            }
+
+            .container h2 {
+                font-size: 1.2em;
+            }
+
+            .form-group input, .form-group textarea {
+                width: calc(100% - 1em);
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="authContainer" class="auth-container">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="authenticate()">Entrar</button>
+    </div>
+
+    <div id="mainContainer" class="main-container">
+        <header>
+            👨🏻‍💻 Admin Panel 👨🏻‍💻
+        </header>
+        <div class="container">
+            <h2>Crear Comprobante</h2>
+            <div class="form-group">
+                <label for="clientName">Nombre del Cliente:</label>
+                <input type="text" id="clientName" required>
+            </div>
+            <div class="form-group">
+                <label for="clientAddress">Dirección del Cliente:</label>
+                <input type="text" id="clientAddress" required>
+            </div>
+            <div class="form-group">
+                <label for="clientEmail">Correo Electrónico del Cliente:</label>
+                <input type="email" id="clientEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="clientPhone">Teléfono del Cliente:</label>
+                <input type="tel" id="clientPhone" required>
+            </div>
+            <div class="form-group">
+                <label for="invoiceDate">Fecha de Comprobante:</label>
+                <input type="date" id="invoiceDate" required>
+            </div>
+            <div class="form-group">
+                <label for="invoiceNumber">Número de Comprobante:</label>
+                <input type="text" id="invoiceNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="items">Artículos:</label>
+                <textarea id="items" rows="4" required placeholder="Descripción de artículos, cantidad, precio"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="totalAmount">Monto Total:</label>
+                <input type="number" id="totalAmount" required>
+            </div>
+            <button onclick="generateInvoice()">Generar Comprobante</button>
+            <div id="invoiceContainer" class="invoice-container">
+                <div class="paid-indicator">✔️ Pagado</div>
+                <h2>Comprobante</h2>
+                <p id="clientInfo"></p>
+                <p id="invoiceDetails"></p>
+                <p id="itemList"></p>
+                <p id="totalAmountDisplay"></p>
+                <button onclick="downloadInvoice()">Descargar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        function authenticate() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Credenciales
+            const validUsername = 'AdminTania';
+            const validPassword = 'Monedero2';
+
+            if (username === validUsername && password === validPassword) {
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                alert('Usuario o contraseña incorrectos');
+            }
+        }
+
+        function generateInvoice() {
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const clientEmail = document.getElementById('clientEmail').value;
+            const clientPhone = document.getElementById('clientPhone').value;
+            const invoiceDate = document.getElementById('invoiceDate').value;
+            const invoiceNumber = document.getElementById('invoiceNumber').value;
+            const items = document.getElementById('items').value;
+            const totalAmount = document.getElementById('totalAmount').value;
+
+            document.getElementById('clientInfo').innerHTML = `<strong>Cliente:</strong> ${clientName} <br> <strong>Dirección:</strong> ${clientAddress} <br> <strong>Email:</strong> ${clientEmail} <br> <strong>Teléfono:</strong> ${clientPhone}`;
+            document.getElementById('invoiceDetails').innerHTML = `<strong>Fecha:</strong> ${invoiceDate} <br> <strong>Número de Comprobante:</strong> ${invoiceNumber}`;
+            document.getElementById('itemList').innerHTML = `<strong>Artículos:</strong> <br> ${items.replace(/\n/g, '<br>')}`;
+            document.getElementById('totalAmountDisplay').innerHTML = `<strong>Total:</strong> $${totalAmount}`;
+
+            document.getElementById('invoiceContainer').style.display = 'block';
+        }
+
+        function downloadInvoice() {
+            const invoiceContainer = document.getElementById('invoiceContainer');
+            html2canvas(invoiceContainer).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'comprobante.png';
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

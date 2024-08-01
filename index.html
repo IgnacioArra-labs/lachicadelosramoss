@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Lachicadelosramoss</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff00d4;
+            color: white;
+            padding: 1em;
+            font-size: 2em;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-bottom: 5px solid #ff00dde8;
+            box-sizing: border-box;
+        }
+
+        nav {
+            margin: 1em;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        nav a {
+            color: #ff3366;
+            text-decoration: none;
+            margin: 0 1em;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .search-container {
+            text-align: center;
+            margin: 1em;
+        }
+
+        .search-container input[type="text"] {
+            width: calc(100% - 120px);
+            max-width: 300px;
+            padding: 0.8em;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1em;
+            display: inline-block;
+        }
+
+        .search-container button {
+            padding: 0.8em;
+            border: none;
+            border-radius: 12px;
+            background-color: #ff0077;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .search-container button:hover {
+            background-color: #cc0055;
+        }
+
+        .intro-text {
+            margin: 2em auto;
+            padding: 1em;
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .intro-text h2 {
+            font-size: 2em;
+            color: #ff3366;
+            margin-bottom: 1em;
+        }
+
+        .intro-text p {
+            margin-bottom: 1em;
+        }
+
+        .intro-text ol {
+            text-align: left;
+            padding-left: 1.2em;
+        }
+
+        .intro-text li {
+            margin-bottom: 0.5em;
+        }
+
+        @media (max-width: 768px) {
+            .search-container input[type="text"] {
+                width: calc(100% - 80px);
+                max-width: 250px;
+            }
+
+            .search-container button {
+                width: calc(100% - 20px);
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .product {
+                width: calc(100% - 2em);
+            }
+
+            .intro-text {
+                padding: 1em;
+                font-size: 1em;
+            }
+
+            .intro-text h2 {
+                font-size: 1.5em;
+            }
+
+            .intro-text ol {
+                padding-left: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category h2 {
+                font-size: 1.8em;
+            }
+
+            .product h3 {
+                font-size: 1.4em;
+            }
+
+            .product p {
+                font-size: 0.9em;
+            }
+
+            .search-container input[type="text"] {
+                width: 100%;
+            }
+
+            .search-container button {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .intro-text {
+                padding: 0.8em;
+                font-size: 0.9em;
+            }
+
+            .intro-text h2 {
+                font-size: 1.2em;
+            }
+
+            .intro-text ol {
+                padding-left: 0.8em;
+            }
+        }
+
+        .category {
+            margin: 2em auto;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .category h2 {
+            font-size: 2.2em;
+            color: #ff3366;
+            border-bottom: 2px solid #ff3366;
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        .product {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin: 1em auto;
+            padding: 1.5em;
+            width: calc(100% - 2em);
+            max-width: 500px;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 1em;
+        }
+
+        .product h3 {
+            margin: 0.5em 0;
+            font-size: 1.6em;
+            color: #333;
+        }
+
+        .product p {
+            font-size: 1em;
+            color: #666;
+            margin: 0.5em 0;
+        }
+
+        .product .description {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .product .info {
+            margin-bottom: 1em;
+        }
+
+        .product .customize {
+            margin: 1em 0;
+            text-align: left;
+        }
+
+        .product .customize label {
+            display: block;
+            font-weight: bold;
+            margin: 0.5em 0 0.2em;
+        }
+
+        .product .customize input,
+        .product .customize select {
+            width: calc(100% - 2em);
+            padding: 0.8em;
+            margin-bottom: 1em;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #f9f9f9;
+            box-sizing: border-box;
+            font-size: 1em;
+            appearance: none; /* Remove default styling */
+            position: relative; /* Relative positioning for the arrow */
+        }
+
+        .product .customize select {
+            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') no-repeat right 0.7em center/1.5em;
+        }
+
+        .product button {
+            background-color: #ff3366;
+            border: none;
+            color: white;
+            padding: 0.8em;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #cc0055;
+            transform: scale(1.03);
+        }
+
+        .contact-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff0077;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-button:hover {
+            background-color: #cc0055;
+        }
+
+        .contact-button i {
+            font-size: 1.2em; /* Ajustar tamaño del ícono */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        @Lachicadelosramoss
+    </header>
+    <nav>
+        <a href="#cumpleanos-eventos">Eventos</a> |
+        <a href="#regalos">Regalos</a> |
+        <a href="admin.html">Login 👨🏻‍💻</a>
+    </nav>
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="Buscar productos...">
+        <button onclick="searchProducts()">Buscar</button>
+    </div>
+
+    <div class="intro-text">
+        <h2>🎉Bienvenidos a @Lachicadelosramoss🎉</h2>
+        <p>Ubicados en San Martin Mendoza, ofrecemos el mejor servicio. Comprar es fácil:</p>
+        <ol>
+            <li>🔹Elige tu producto favorito.</li>
+            <li>🔹Personaliza tu pedido (si aplica).</li>
+            <li>🔹Presiona "Realizar Pedido" para pagar.</li>
+            <li>🔹Seras Redirigido a mi nuestro whatsapp.</li>
+        </ol>
+    </div>
+
+    <main>
+        <section id="cumpleanos-eventos" class="category">
+            <h2>Cumpleaños y Eventos</h2>
+            <div class="product">
+                <img src="Piñata1.jpg" alt="Piñata">
+                <h3>Piñata</h3>
+                <h1>$7.000 ARS</h1>
+                <p class="description">Haz que tu celebración sea inolvidable con nuestras piñatas personalizadas. Elige la temática que más te guste y selecciona el tamaño perfecto (50 o 70 cm) para tu evento. Cada piñata está diseñada para agregar diversión y alegría a tus fiestas. ¡Personaliza tu piñata y asegura que sea el centro de atención en tu próximo evento!</p>
+                <div class="customize">
+                    <label for="theme">Seleccionar temática:</label>
+                    <select id="theme">
+                        <option value="spiderman">Spiderman</option>
+                        <option value="princesas">Princesas</option>
+                        <option value="pokemon">Pokemon</option>
+                    </select>
+                    <label for="size">Seleccionar tamaño:</label>
+                    <select id="size">
+                        <option value="50cm">50 cm</option>
+                        <option value="70cm">70 cm</option>
+                    </select>
+                </div>
+                <button onclick="buyProduct('Piñata', 'Temática: ' + document.getElementById('theme').value, 'Tamaño: ' + document.getElementById('size').value)">Realizar Pedido</button>
+            </div>
+            <div class="product">
+                <img src="Bolsita.jpg" alt="Bolsitas">
+                <h3>Bolsitas</h3>
+                <h1>$450,00 ARS C/U</h1>
+                <p class="description">Haz que tus eventos sean aún más especiales con nuestras bolsitas personalizadas. Puedes elegir la cantidad exacta que necesitas para tus celebraciones. Cada bolsita se adapta a tus gustos y necesidades, asegurando que cada detalle de tu evento sea perfecto. ¡Personaliza tus bolsitas y deja una impresión inolvidable en tus invitados!</p>
+                <div class="customize">
+                    <label for="theme">Seleccionar temática:</label>
+                    <select id="theme">
+                        <option value="spiderman">Spiderman</option>
+                        <option value="princesas">Princesas</option>
+                        <option value="pokemon">Pokemon</option>
+                    </select>
+                    <label for="quantity">Seleccionar cantidad:</label>
+                    <input type="number" id="quantity" min="1" step="1">
+                </div>
+                <button onclick="buyProduct('Bolsitas', 'Cantidad: ' + document.getElementById('quantity').value)">Realizar Pedido</button>
+            </div>
+        </section>
+
+        <section id="regalos" class="category">
+            <h2>Regalos</h2>
+            <div class="product">
+                <img src="RamoM1.jpg" alt="Ramo 1">
+                <h3>Ramo de Mariposas</h3>
+                <h1>$7.000 ARS</h1>
+                <p class="description">Haz que tu ramo sea único eligiendo tus colores favoritos para la papelería y las mariposas! Además, este ramo viene adornado con luces LED que puedes seleccionar en colores blancos, cálidos o multicolor para darle ese toque especial que buscas. ¡Personaliza tu ramo y hazlo verdaderamente tuyo!</p>
+                <div class="customize">
+                    <label for="paper-color">Color de papelería:</label>
+                    <select id="paper-color">
+                        <option value="blanco">Blanco</option>
+                        <option value="rojo">Rojo</option>
+                        <option value="azul">Azul</option>
+                    </select>
+                    <label for="butterfly-color">Color de mariposas:</label>
+                    <select id="butterfly-color">
+                        <option value="blanco">Blanco</option>
+                        <option value="rosa">Rosa</option>
+                        <option value="lila">Lila</option>
+                    </select>
+                    <label for="light-color">Color de luces:</label>
+                    <select id="light-color">
+                        <option value="blancas">Blancas</option>
+                        <option value="calidas">Cálidas</option>
+                        <option value="multicolor">Multicolor</option>
+                    </select>
+                </div>
+                <button onclick="buyProduct('Ramo 1', 'Color de papelería: ' + document.getElementById('paper-color').value, 'Color de mariposas: ' + document.getElementById('butterfly-color').value, 'Color de luces: ' + document.getElementById('light-color').value)">Realizar Pedido</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="contact-button" onclick="contactUs()">
+        <i class="fa fa-phone" aria-hidden="true"></i>
+    </div>
+
+    <script>
+        function searchProducts() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const products = document.querySelectorAll('.product');
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function buyProduct(product, ...details) {
+            const message = `🎉 ¡Hola! 🎉\n\nQuiero realizar un pedido de ${product}.\n\nDetalles:\n${details.map(detail => `🔹 ${detail}`).join('\n')}\n\nPor favor, confirmen el pedido. 🙏`;
+            const whatsappURL = `https://wa.me/5492634283081?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        function contactUs() {
+            const whatsappURL = `https://wa.me/5492634283081`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>
