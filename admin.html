@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Comprobantes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -202,6 +203,74 @@
                 font-size: 0.9em;
             }
         }
+
+        /* Estilos para el comprobante final */
+        .invoice-container .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 1em;
+            margin-bottom: 1em;
+        }
+
+        .invoice-container .header h2 {
+            margin: 0;
+            color: #ff3366;
+        }
+
+        .invoice-container .details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1em;
+        }
+
+        .invoice-container .details div {
+            width: 48%;
+        }
+
+        .invoice-container .items {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        .invoice-container .items th, .invoice-container .items td {
+            border: 1px solid #ddd;
+            padding: 0.5em;
+            text-align: left;
+        }
+
+        .invoice-container .items th {
+            background-color: #f7f7f7;
+        }
+
+        .invoice-container .totals {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .invoice-container .totals div {
+            width: 48%;
+        }
+
+        .invoice-container .paid-indicator {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            font-size: 1.5em;
+            color: #4caf50;
+        }
+
+        .invoice-container .signed-indicator {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            font-size: 1.5em;
+            color: #ff3366;
+        }
+
+        /* ... otros estilos */
     </style>
 </head>
 <body>
@@ -214,7 +283,7 @@
 
     <div id="mainContainer" class="main-container">
         <header>
-            Admin Panel
+            👨🏻‍💻 Admin Panel 👨🏻‍💻
         </header>
         <div class="container">
             <h2>Crear Comprobante</h2>
@@ -243,41 +312,70 @@
                 <input type="text" id="invoiceNumber" required>
             </div>
             <div class="form-group">
-                <label for="items">Artículos:</label>
-                <textarea id="items" rows="4" required placeholder="Descripción de artículos, cantidad, precio"></textarea>
+                <label for="items">Artículos (formato: descripción, cantidad, precio por línea):</label>
+                <textarea id="items" rows="4" required></textarea>
             </div>
             <div class="form-group">
                 <label for="totalAmount">Monto Total:</label>
                 <input type="number" id="totalAmount" required>
             </div>
-            <button onclick="generateInvoice()">Generar Comprobante</button>
-            <div id="invoiceContainer" class="invoice-container">
-                <div class="paid-indicator">✔️ Pagado</div>
-                <h2>Comprobante</h2>
-                <p id="clientInfo"></p>
-                <p id="invoiceDetails"></p>
-                <p id="itemList"></p>
-                <p id="totalAmountDisplay"></p>
-                <button onclick="downloadInvoice()">Descargar</button>
+            <div class="form-group">
+                <label for="paidAmount">Monto Pagado:</label>
+                <input type="number" id="paidAmount" required>
             </div>
+            <div class="form-group">
+                <label for="status">Estado del Comprobante:</label>
+                <select id="status" required>
+                    <option value="paid">Pagado</option>
+                    <option value="signed">Señado</option>
+                </select>
+            </div>
+            <button onclick="generateInvoice()">Generar Comprobante</button>
+        </div>
+        <div id="invoiceContainer" class="invoice-container">
+            <div class="header">
+                <h2>Comprobante</h2>
+                <div id="statusIndicator" class="paid-indicator"></div>
+            </div>
+            <div class="details">
+                <div>
+                    <p><strong>Nombre:</strong> <span id="clientNameDisplay"></span></p>
+                    <p><strong>Dirección:</strong> <span id="clientAddressDisplay"></span></p>
+                    <p><strong>Correo Electrónico:</strong> <span id="clientEmailDisplay"></span></p>
+                    <p><strong>Teléfono:</strong> <span id="clientPhoneDisplay"></span></p>
+                </div>
+                <div>
+                    <p><strong>Fecha:</strong> <span id="invoiceDateDisplay"></span></p>
+                    <p><strong>Número de Comprobante:</strong> <span id="invoiceNumberDisplay"></span></p>
+                    <p><strong>Monto Total:</strong> $<span id="totalAmountDisplay"></span></p>
+                    <p><strong>Monto Pagado:</strong> $<span id="paidAmountDisplay"></span></p>
+                </div>
+            </div>
+            <h3>Artículos</h3>
+            <table class="items">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsList">
+                </tbody>
+            </table>
+            <button id="downloadBtn" style="display: none;">Descargar Comprobante</button>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         function authenticate() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            // Credenciales
-            const validUsername = 'AdminTania';
-            const validPassword = 'Monedero2';
-
-            if (username === validUsername && password === validPassword) {
+            if (username === 'admin' && password === 'admin') {
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
             } else {
-                alert('Usuario o contraseña incorrectos');
+                alert('Usuario o contraseña incorrectos.');
             }
         }
 
@@ -290,21 +388,58 @@
             const invoiceNumber = document.getElementById('invoiceNumber').value;
             const items = document.getElementById('items').value;
             const totalAmount = document.getElementById('totalAmount').value;
+            const paidAmount = document.getElementById('paidAmount').value;
+            const status = document.getElementById('status').value;
 
-            document.getElementById('clientInfo').innerHTML = `<strong>Cliente:</strong> ${clientName} <br> <strong>Dirección:</strong> ${clientAddress} <br> <strong>Email:</strong> ${clientEmail} <br> <strong>Teléfono:</strong> ${clientPhone}`;
-            document.getElementById('invoiceDetails').innerHTML = `<strong>Fecha:</strong> ${invoiceDate} <br> <strong>Número de Comprobante:</strong> ${invoiceNumber}`;
-            document.getElementById('itemList').innerHTML = `<strong>Artículos:</strong> <br> ${items.replace(/\n/g, '<br>')}`;
-            document.getElementById('totalAmountDisplay').innerHTML = `<strong>Total:</strong> $${totalAmount}`;
+            if (!clientName || !clientAddress || !clientEmail || !clientPhone || !invoiceDate || !invoiceNumber || !items || !totalAmount || !paidAmount) {
+                alert('Todos los campos son obligatorios.');
+                return;
+            }
+
+            document.getElementById('clientNameDisplay').textContent = clientName;
+            document.getElementById('clientAddressDisplay').textContent = clientAddress;
+            document.getElementById('clientEmailDisplay').textContent = clientEmail;
+            document.getElementById('clientPhoneDisplay').textContent = clientPhone;
+            document.getElementById('invoiceDateDisplay').textContent = invoiceDate;
+            document.getElementById('invoiceNumberDisplay').textContent = invoiceNumber;
+            document.getElementById('totalAmountDisplay').textContent = totalAmount;
+            document.getElementById('paidAmountDisplay').textContent = paidAmount;
+
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+            items.split('\n').forEach(item => {
+                const trimmedItem = item.trim();
+                if (trimmedItem) {
+                    const parts = trimmedItem.split(',');
+                    if (parts.length === 3) {
+                        const [description, quantity, price] = parts;
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${description.trim()}</td><td>${quantity.trim()}</td><td>${price.trim()}</td>`;
+                        itemsList.appendChild(row);
+                    } else {
+                        alert('Formato de artículo incorrecto. Asegúrate de que cada línea siga el formato: descripción, cantidad, precio.');
+                        return;
+                    }
+                }
+            });
+
+            const statusIndicator = document.getElementById('statusIndicator');
+            if (status === 'paid') {
+                statusIndicator.textContent = 'Pagado ✔';
+                statusIndicator.classList.add('paid-indicator');
+                statusIndicator.classList.remove('signed-indicator');
+            } else if (status === 'signed') {
+                statusIndicator.textContent = 'Señado ✖';
+                statusIndicator.classList.add('signed-indicator');
+                statusIndicator.classList.remove('paid-indicator');
+            }
 
             document.getElementById('invoiceContainer').style.display = 'block';
-        }
 
-        function downloadInvoice() {
-            const invoiceContainer = document.getElementById('invoiceContainer');
-            html2canvas(invoiceContainer).then(canvas => {
+            html2canvas(document.getElementById('invoiceContainer')).then(canvas => {
                 const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = 'comprobante.png';
+                link.download = `comprobante_${invoiceNumber}.png`;
+                link.href = canvas.toDataURL();
                 link.click();
             });
         }
