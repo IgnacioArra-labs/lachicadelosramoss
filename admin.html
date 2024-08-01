@@ -7,8 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             color: #333;
@@ -17,368 +17,289 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden; /* Elimina el scroll horizontal */
+            overflow: auto;
         }
 
-        .auth-container, .main-container {
-            display: none;
+        .main-container {
             width: 100%;
-            max-width: 500px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 2em;
-            margin: 1em;
+            max-width: 900px;
+            margin: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             box-sizing: border-box;
-        }
-
-        .auth-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-container h2 {
-            margin-bottom: 1em;
-            color: #ff3366;
-        }
-
-        .auth-container input {
-            width: calc(100% - 2em);
-            padding: 0.8em;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 1em;
-            margin-bottom: 1em;
-        }
-
-        .auth-container button {
-            background-color: #ff3366;
-            border: none;
-            color: white;
-            padding: 0.8em;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            width: 100%;
-        }
-
-        .auth-container button:hover {
-            background-color: #cc0055;
-            transform: scale(1.03);
         }
 
         header {
-            background-color: #ff00d4;
-            color: white;
-            padding: 1em;
-            font-size: 2em;
+            background-color: #0056b3;
+            color: #fff;
+            padding: 10px;
+            font-size: 24px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            box-sizing: border-box;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        .container {
-            margin: 2em auto;
-            padding: 2em;
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-size: 1.2em;
-            color: #333;
-            box-sizing: border-box;
-        }
-
-        .container h2 {
-            font-size: 2em;
-            color: #ff3366;
-            margin-bottom: 1em;
+        .form-container {
+            margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 1.5em;
-            text-align: left;
+            margin-bottom: 15px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5em;
+            margin-bottom: 5px;
             font-weight: bold;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 0.8em;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 1em;
-            background: #f9f9f9;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-        }
-
-        button {
-            background-color: #ff3366;
-            border: none;
-            color: white;
-            padding: 0.8em;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.1em;
-            width: 100%;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            margin-top: 1em;
-        }
-
-        button:hover {
-            background-color: #cc0055;
-            transform: scale(1.03);
+            border-radius: 5px;
         }
 
         .invoice-container {
-            display: none;
-            background: white;
+            background: #fff;
             border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 2em;
-            margin-top: 2em;
-            text-align: left;
-            position: relative;
-            box-sizing: border-box;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+            max-height: calc(100vh - 200px);
         }
 
-        .invoice-container .paid-indicator {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            font-size: 1.5em;
-            color: #4caf50;
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .invoice-header .company-info {
+            font-size: 16px;
+        }
+
+        .invoice-header .company-info h2 {
+            margin: 0;
+            color: #0056b3;
+        }
+
+        .invoice-header .company-info p {
+            margin: 4px 0;
+        }
+
+        .invoice-header .invoice-info {
+            text-align: right;
+            font-size: 16px;
+        }
+
+        .invoice-header .invoice-info div {
+            margin-bottom: 4px;
+        }
+
+        .invoice-details {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .invoice-details div {
+            margin-bottom: 8px;
+        }
+
+        .invoice-details strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .invoice-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-items th, .invoice-items td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .invoice-items th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .invoice-totals {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .invoice-totals div {
+            width: 48%;
+        }
+
+        .status {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .status.paid {
+            color: #28a745;
+        }
+
+        .status.signed {
+            color: #dc3545;
+        }
+
+        button {
+            background-color: #0056b3;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004494;
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 1em;
-                font-size: 1em;
+            .invoice-container {
+                padding: 15px;
             }
 
-            .container h2 {
-                font-size: 1.5em;
+            .invoice-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
-            .form-group input, .form-group textarea {
-                width: calc(100% - 2em);
+            .invoice-header .invoice-info {
+                text-align: left;
+                margin-top: 10px;
             }
 
-            button {
-                font-size: 1em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.8em;
-                font-size: 0.9em;
+            .invoice-totals {
+                flex-direction: column;
             }
 
-            .container h2 {
-                font-size: 1.2em;
-            }
-
-            .form-group input, .form-group textarea {
-                width: calc(100% - 1em);
-            }
-
-            button {
-                font-size: 0.9em;
+            .invoice-totals div {
+                width: 100%;
+                margin-bottom: 10px;
             }
         }
-
-        /* Estilos para el comprobante final */
-        .invoice-container .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 1em;
-            margin-bottom: 1em;
-        }
-
-        .invoice-container .header h2 {
-            margin: 0;
-            color: #ff3366;
-        }
-
-        .invoice-container .details {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1em;
-        }
-
-        .invoice-container .details div {
-            width: 48%;
-        }
-
-        .invoice-container .items {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 1em;
-        }
-
-        .invoice-container .items th, .invoice-container .items td {
-            border: 1px solid #ddd;
-            padding: 0.5em;
-            text-align: left;
-        }
-
-        .invoice-container .items th {
-            background-color: #f7f7f7;
-        }
-
-        .invoice-container .totals {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .invoice-container .totals div {
-            width: 48%;
-        }
-
-        .invoice-container .paid-indicator {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            font-size: 1.5em;
-            color: #4caf50;
-        }
-
-        .invoice-container .signed-indicator {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            font-size: 1.5em;
-            color: #ff3366;
-        }
-
-        /* ... otros estilos */
     </style>
 </head>
 <body>
-    <div id="authContainer" class="auth-container">
-        <h2>Iniciar Sesión</h2>
-        <input type="text" id="username" placeholder="Usuario">
-        <input type="password" id="password" placeholder="Contraseña">
-        <button onclick="authenticate()">Entrar</button>
-    </div>
+    <div class="main-container">
+        <header>Generador de Comprobantes</header>
 
-    <div id="mainContainer" class="main-container">
-        <header>
-            👨🏻‍💻 Admin Panel 👨🏻‍💻
-        </header>
-        <div class="container">
-            <h2>Crear Comprobante</h2>
+        <div class="form-container">
             <div class="form-group">
                 <label for="clientName">Nombre del Cliente:</label>
-                <input type="text" id="clientName" required>
+                <input type="text" id="clientName" placeholder="Nombre del Cliente">
             </div>
             <div class="form-group">
                 <label for="clientAddress">Dirección del Cliente:</label>
-                <input type="text" id="clientAddress" required>
+                <input type="text" id="clientAddress" placeholder="Dirección del Cliente">
             </div>
             <div class="form-group">
-                <label for="clientEmail">Correo Electrónico del Cliente:</label>
-                <input type="email" id="clientEmail" required>
+                <label for="clientEmail">Correo del Cliente:</label>
+                <input type="email" id="clientEmail" placeholder="Correo del Cliente">
             </div>
             <div class="form-group">
                 <label for="clientPhone">Teléfono del Cliente:</label>
-                <input type="tel" id="clientPhone" required>
+                <input type="tel" id="clientPhone" placeholder="Teléfono del Cliente">
             </div>
             <div class="form-group">
-                <label for="invoiceDate">Fecha de Comprobante:</label>
-                <input type="date" id="invoiceDate" required>
+                <label for="invoiceDate">Fecha:</label>
+                <input type="date" id="invoiceDate">
             </div>
             <div class="form-group">
-                <label for="invoiceNumber">Número de Comprobante:</label>
-                <input type="text" id="invoiceNumber" required>
+                <label for="invoiceNumber">Número:</label>
+                <input type="text" id="invoiceNumber" placeholder="Número del Comprobante">
             </div>
             <div class="form-group">
-                <label for="items">Artículos (formato: descripción, cantidad, precio por línea):</label>
-                <textarea id="items" rows="4" required></textarea>
+                <label for="items">Artículos (Formato: Nombre, Cantidad, Precio, por línea):</label>
+                <textarea id="items" rows="5" placeholder="Artículo, Cantidad, Precio"></textarea>
             </div>
             <div class="form-group">
-                <label for="totalAmount">Monto Total:</label>
-                <input type="number" id="totalAmount" required>
+                <label for="totalAmount">Total:</label>
+                <input type="number" id="totalAmount" step="0.01" placeholder="Monto Total">
             </div>
             <div class="form-group">
-                <label for="paidAmount">Monto Pagado:</label>
-                <input type="number" id="paidAmount" required>
+                <label for="amountPaid">Monto Pagado:</label>
+                <input type="number" id="amountPaid" step="0.01" placeholder="Monto Pagado">
             </div>
             <div class="form-group">
-                <label for="status">Estado del Comprobante:</label>
-                <select id="status" required>
-                    <option value="paid">Pagado</option>
-                    <option value="signed">Señado</option>
+                <label for="remainingAmount">Monto Restante:</label>
+                <input type="number" id="remainingAmount" step="0.01" placeholder="Monto Restante">
+            </div>
+            <div class="form-group">
+                <label for="paymentStatus">Estado:</label>
+                <select id="paymentStatus">
+                    <option value="">Seleccionar Estado</option>
+                    <option value="pagado">Pagado</option>
+                    <option value="señado">Señado</option>
                 </select>
             </div>
             <button onclick="generateInvoice()">Generar Comprobante</button>
         </div>
-        <div id="invoiceContainer" class="invoice-container">
-            <div class="header">
-                <h2>Comprobante</h2>
-                <div id="statusIndicator" class="paid-indicator"></div>
-            </div>
-            <div class="details">
-                <div>
-                    <p><strong>Nombre:</strong> <span id="clientNameDisplay"></span></p>
-                    <p><strong>Dirección:</strong> <span id="clientAddressDisplay"></span></p>
-                    <p><strong>Correo Electrónico:</strong> <span id="clientEmailDisplay"></span></p>
-                    <p><strong>Teléfono:</strong> <span id="clientPhoneDisplay"></span></p>
+
+        <div id="invoiceContainer" class="invoice-container" style="display: none;">
+            <div class="invoice-header">
+                <div class="company-info">
+                    <h2>Lachicadelosramoss</h2>
+                    <p>Dirección: Doctor Michaut 571</p>
+                    <p>Teléfono: 2634283081</p>
                 </div>
-                <div>
-                    <p><strong>Fecha:</strong> <span id="invoiceDateDisplay"></span></p>
-                    <p><strong>Número de Comprobante:</strong> <span id="invoiceNumberDisplay"></span></p>
-                    <p><strong>Monto Total:</strong> $<span id="totalAmountDisplay"></span></p>
-                    <p><strong>Monto Pagado:</strong> $<span id="paidAmountDisplay"></span></p>
+                <div class="invoice-info">
+                    <div><strong>Fecha:</strong> <span id="invoiceDateDisplay"></span></div>
+                    <div><strong>Número:</strong> <span id="invoiceNumberDisplay"></span></div>
                 </div>
             </div>
-            <h3>Artículos</h3>
-            <table class="items">
+
+            <div class="invoice-details">
+                <div><strong>Cliente:</strong> <span id="invoiceClientNameDisplay"></span></div>
+                <div><strong>Dirección:</strong> <span id="invoiceClientAddressDisplay"></span></div>
+                <div><strong>Correo:</strong> <span id="invoiceClientEmailDisplay"></span></div>
+                <div><strong>Teléfono:</strong> <span id="invoiceClientPhoneDisplay"></span></div>
+            </div>
+
+            <table class="invoice-items">
                 <thead>
                     <tr>
-                        <th>Descripción</th>
+                        <th>Artículo</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                     </tr>
                 </thead>
-                <tbody id="itemsList">
+                <tbody id="itemsTableBody">
+                    <!-- Las filas de los artículos se agregarán aquí -->
                 </tbody>
             </table>
-            <button id="downloadBtn" style="display: none;">Descargar Comprobante</button>
+
+            <div class="invoice-totals">
+                <div><strong>Total:</strong> <span id="totalAmountDisplay"></span></div>
+                <div><strong>Monto Pagado:</strong> <span id="amountPaidDisplay"></span></div>
+                <div><strong>Monto Restante:</strong> <span id="remainingAmountDisplay"></span></div>
+            </div>
+
+            <div class="status" id="invoiceStatus"></div>
+
+            <button onclick="downloadInvoice()">Descargar Comprobante</button>
         </div>
     </div>
 
     <script>
-        function authenticate() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            if (username === 'admin' && password === 'admin') {
-                document.getElementById('authContainer').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-            } else {
-                alert('Usuario o contraseña incorrectos.');
-            }
-        }
-
         function generateInvoice() {
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
@@ -388,57 +309,39 @@
             const invoiceNumber = document.getElementById('invoiceNumber').value;
             const items = document.getElementById('items').value;
             const totalAmount = document.getElementById('totalAmount').value;
-            const paidAmount = document.getElementById('paidAmount').value;
-            const status = document.getElementById('status').value;
+            const amountPaid = document.getElementById('amountPaid').value;
+            const remainingAmount = document.getElementById('remainingAmount').value;
+            const paymentStatus = document.getElementById('paymentStatus').value;
 
-            if (!clientName || !clientAddress || !clientEmail || !clientPhone || !invoiceDate || !invoiceNumber || !items || !totalAmount || !paidAmount) {
-                alert('Todos los campos son obligatorios.');
-                return;
-            }
-
-            document.getElementById('clientNameDisplay').textContent = clientName;
-            document.getElementById('clientAddressDisplay').textContent = clientAddress;
-            document.getElementById('clientEmailDisplay').textContent = clientEmail;
-            document.getElementById('clientPhoneDisplay').textContent = clientPhone;
             document.getElementById('invoiceDateDisplay').textContent = invoiceDate;
             document.getElementById('invoiceNumberDisplay').textContent = invoiceNumber;
-            document.getElementById('totalAmountDisplay').textContent = totalAmount;
-            document.getElementById('paidAmountDisplay').textContent = paidAmount;
+            document.getElementById('invoiceClientNameDisplay').textContent = clientName;
+            document.getElementById('invoiceClientAddressDisplay').textContent = clientAddress;
+            document.getElementById('invoiceClientEmailDisplay').textContent = clientEmail;
+            document.getElementById('invoiceClientPhoneDisplay').textContent = clientPhone;
+            document.getElementById('totalAmountDisplay').textContent = `$${parseFloat(totalAmount).toFixed(2)}`;
+            document.getElementById('amountPaidDisplay').textContent = `$${parseFloat(amountPaid).toFixed(2)}`;
+            document.getElementById('remainingAmountDisplay').textContent = `$${parseFloat(remainingAmount).toFixed(2)}`;
 
-            const itemsList = document.getElementById('itemsList');
-            itemsList.innerHTML = '';
-            items.split('\n').forEach(item => {
-                const trimmedItem = item.trim();
-                if (trimmedItem) {
-                    const parts = trimmedItem.split(',');
-                    if (parts.length === 3) {
-                        const [description, quantity, price] = parts;
-                        const row = document.createElement('tr');
-                        row.innerHTML = `<td>${description.trim()}</td><td>${quantity.trim()}</td><td>${price.trim()}</td>`;
-                        itemsList.appendChild(row);
-                    } else {
-                        alert('Formato de artículo incorrecto. Asegúrate de que cada línea siga el formato: descripción, cantidad, precio.');
-                        return;
-                    }
+            const itemsTableBody = document.getElementById('itemsTableBody');
+            itemsTableBody.innerHTML = '';
+            items.split('\n').forEach(line => {
+                const [name, quantity, price] = line.split(',');
+                if (name && quantity && price) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${name.trim()}</td><td>${quantity.trim()}</td><td>$${parseFloat(price.trim()).toFixed(2)}</td>`;
+                    itemsTableBody.appendChild(row);
                 }
             });
 
-            const statusIndicator = document.getElementById('statusIndicator');
-            if (status === 'paid') {
-                statusIndicator.textContent = 'Pagado ✔';
-                statusIndicator.classList.add('paid-indicator');
-                statusIndicator.classList.remove('signed-indicator');
-            } else if (status === 'signed') {
-                statusIndicator.textContent = 'Señado ✖';
-                statusIndicator.classList.add('signed-indicator');
-                statusIndicator.classList.remove('paid-indicator');
-            }
 
             document.getElementById('invoiceContainer').style.display = 'block';
+        }
 
-            html2canvas(document.getElementById('invoiceContainer')).then(canvas => {
+        function downloadInvoice() {
+            html2canvas(document.querySelector("#invoiceContainer")).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `comprobante_${invoiceNumber}.png`;
+                link.download = 'comprobante.png';
                 link.href = canvas.toDataURL();
                 link.click();
             });
