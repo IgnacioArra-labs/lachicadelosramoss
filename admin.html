@@ -55,7 +55,7 @@
             font-weight: bold;
         }
 
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -268,10 +268,10 @@
             </div>
 
             <div class="invoice-details">
-                <div><strong>Cliente:</strong> <span id="invoiceClientNameDisplay"></span></div>
-                <div><strong>Dirección:</strong> <span id="invoiceClientAddressDisplay"></span></div>
-                <div><strong>Correo:</strong> <span id="invoiceClientEmailDisplay"></span></div>
-                <div><strong>Teléfono:</strong> <span id="invoiceClientPhoneDisplay"></span></div>
+                <div><strong>Cliente:</strong> <span id="clientNameDisplay"></span></div>
+                <div><strong>Dirección:</strong> <span id="clientAddressDisplay"></span></div>
+                <div><strong>Correo:</strong> <span id="clientEmailDisplay"></span></div>
+                <div><strong>Teléfono:</strong> <span id="clientPhoneDisplay"></span></div>
             </div>
 
             <table class="invoice-items">
@@ -282,21 +282,18 @@
                         <th>Precio</th>
                     </tr>
                 </thead>
-                <tbody id="itemsTableBody">
-                    <!-- Las filas de los artículos se agregarán aquí -->
-                </tbody>
+                <tbody id="itemsList"></tbody>
             </table>
 
             <div class="invoice-totals">
                 <div><strong>Total:</strong> <span id="totalAmountDisplay"></span></div>
-                <div><strong>Monto Pagado:</strong> <span id="amountPaidDisplay"></span></div>
-                <div><strong>Monto Restante:</strong> <span id="remainingAmountDisplay"></span></div>
+                <div><strong>Pagado:</strong> <span id="amountPaidDisplay"></span></div>
+                <div><strong>Restante:</strong> <span id="remainingAmountDisplay"></span></div>
+                <div><strong>Estado:</strong> <span id="paymentStatusDisplay" class="status"></span></div>
             </div>
-
-            <div class="status" id="invoiceStatus"></div>
-
-            <button onclick="downloadInvoice()">Descargar Comprobante</button>
         </div>
+
+        <button id="downloadButton" style="display: none;" onclick="downloadInvoice()">Descargar Comprobante</button>
     </div>
 
     <script>
@@ -307,46 +304,70 @@
             const clientPhone = document.getElementById('clientPhone').value;
             const invoiceDate = document.getElementById('invoiceDate').value;
             const invoiceNumber = document.getElementById('invoiceNumber').value;
-            const items = document.getElementById('items').value;
+            const items = document.getElementById('items').value.trim();
             const totalAmount = document.getElementById('totalAmount').value;
             const amountPaid = document.getElementById('amountPaid').value;
             const remainingAmount = document.getElementById('remainingAmount').value;
             const paymentStatus = document.getElementById('paymentStatus').value;
 
+            // Mostrar el contenedor del comprobante
+            document.getElementById('invoiceContainer').style.display = 'block';
+            document.getElementById('downloadButton').style.display = 'block';
+
+            // Asignar los valores al comprobante
+            document.getElementById('clientNameDisplay').textContent = clientName;
+            document.getElementById('clientAddressDisplay').textContent = clientAddress;
+            document.getElementById('clientEmailDisplay').textContent = clientEmail;
+            document.getElementById('clientPhoneDisplay').textContent = clientPhone;
             document.getElementById('invoiceDateDisplay').textContent = invoiceDate;
             document.getElementById('invoiceNumberDisplay').textContent = invoiceNumber;
-            document.getElementById('invoiceClientNameDisplay').textContent = clientName;
-            document.getElementById('invoiceClientAddressDisplay').textContent = clientAddress;
-            document.getElementById('invoiceClientEmailDisplay').textContent = clientEmail;
-            document.getElementById('invoiceClientPhoneDisplay').textContent = clientPhone;
-            document.getElementById('totalAmountDisplay').textContent = `$${parseFloat(totalAmount).toFixed(2)}`;
-            document.getElementById('amountPaidDisplay').textContent = `$${parseFloat(amountPaid).toFixed(2)}`;
-            document.getElementById('remainingAmountDisplay').textContent = `$${parseFloat(remainingAmount).toFixed(2)}`;
+            document.getElementById('totalAmountDisplay').textContent = totalAmount;
+            document.getElementById('amountPaidDisplay').textContent = amountPaid;
+            document.getElementById('remainingAmountDisplay').textContent = remainingAmount;
+            
+            // Mostrar el estado
+            const statusElement = document.getElementById('paymentStatusDisplay');
+            if (paymentStatus === 'pagado') {
+                statusElement.textContent = 'Pagado';
+                statusElement.className = 'status paid';
+            } else if (paymentStatus === 'señado') {
+                statusElement.textContent = 'Señado';
+                statusElement.className = 'status signed';
+            } else {
+                statusElement.textContent = '';
+                statusElement.className = 'status';
+            }
 
-            const itemsTableBody = document.getElementById('itemsTableBody');
-            itemsTableBody.innerHTML = '';
-            items.split('\n').forEach(line => {
-                const [name, quantity, price] = line.split(',');
-                if (name && quantity && price) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${name.trim()}</td><td>${quantity.trim()}</td><td>$${parseFloat(price.trim()).toFixed(2)}</td>`;
-                    itemsTableBody.appendChild(row);
-                }
-            });
-
-
-            document.getElementById('invoiceContainer').style.display = 'block';
+            // Mostrar los ítems
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+            if (items) {
+                const itemsArray = items.split('\n');
+                itemsArray.forEach(item => {
+                    const [name, quantity, price] = item.split(',');
+                    if (name && quantity && price) {
+                        itemsList.innerHTML += `
+                            <tr>
+                                <td>${name.trim()}</td>
+                                <td>${quantity.trim()}</td>
+                                <td>${price.trim()}</td>
+                            </tr>
+                        `;
+                    }
+                });
+            }
         }
 
         function downloadInvoice() {
-            html2canvas(document.querySelector("#invoiceContainer")).then(canvas => {
+            const invoiceContainer = document.getElementById('invoiceContainer');
+
+            html2canvas(invoiceContainer, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
                 link.download = 'comprobante.png';
-                link.href = canvas.toDataURL();
                 link.click();
             });
         }
     </script>
 </body>
 </html>
-
